@@ -9,13 +9,13 @@ namespace DBrownWebApp.Pages
     public class MoviesModel : PageModel
     {
 
-        public IMovieDal Dal {  get; private set; }
-        public List<Movie> Movies { get; private set; }
+        //public IMovieDal Dal { get; private set; }
+        public List<Movie> Movies { get; private set; } = new List<Movie>();
 
-        public MoviesModel(IMovieDal dal) 
-        {
-            Dal = dal;
-        }
+        //public MoviesModel(IMovieDal dal)
+        //{
+        //    Dal = dal;
+        //}
 
 
         [BindProperty]
@@ -24,15 +24,21 @@ namespace DBrownWebApp.Pages
         public void OnGet()
         {
             NewMovie = new Movie();
-            Movies = Dal.GetAllMovies().ToList();
+
+            Movies = MovieDal.Instance.GetAllMovies().ToList();
         }
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid || NewMovie == null) return Page();
+            if (!ModelState.IsValid || NewMovie == null) 
+            { 
+                Movies = MovieDal.Instance.GetAllMovies().ToList();
 
-           Dal.addMovie(NewMovie);
+                return Page();
+            }
 
-            return RedirectToAction("Get");
+           MovieDal.Instance.addMovie(NewMovie);
+
+            return RedirectToPage();
         }
 
         public IActionResult OnPostDelete()

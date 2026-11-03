@@ -10,8 +10,8 @@ namespace DBrownWebApp
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-            builder.Services.AddTransient<IMovieDal, MovieDal>();
-            
+            builder.Services.AddSingleton<IMovieDal>(MovieDal.Instance);
+
 
             var app = builder.Build();
 
