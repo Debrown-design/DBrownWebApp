@@ -1,0 +1,50 @@
+﻿@page
+@using DBrownWebApp.Data.Models
+@using DBrownWebApp.Pages
+@model MoviesModel
+@{
+    ViewData["Title"] = "Movies";
+}
+<h1>Movies</h1>
+
+<h3>Add a New Movie!</h3>
+<form method="post">
+    <input name="id" type="hidden" value="@Model.NewMovie.Id"/>
+    <div>
+        <label asp-for="@Model.NewMovie.Title"></label>
+        <input asp-for="@Model.NewMovie.Title"/>
+        <span asp-validation-for="@Model.NewMovie.Title" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="@Model.NewMovie.Year"></label>
+        <input asp-for="@Model.NewMovie.Year"/>
+        <span asp-validation-for="@Model.NewMovie.Year" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="@Model.NewMovie.Score"></label>
+        <input asp-for="@Model.NewMovie.Score"/>
+        <span asp-validation-for="@Model.NewMovie.Score" class="text-danger"></span>
+    </div>
+    <div>
+        <input type="submit" value="Add Movie"/>
+    </div>
+</form>
+
+
+<div>
+@{
+   
+    //for(Movie movie : movies)
+    foreach(Movie movie in MoviesModel.Provider.Movies)
+    {
+      <partial name="_MoviePartial" model="movie"/> 
+      //<p>@movie</p>
+    }
+}
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

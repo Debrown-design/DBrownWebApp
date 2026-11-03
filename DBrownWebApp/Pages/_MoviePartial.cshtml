@@ -1,0 +1,11 @@
+﻿@using DBrownWebApp.Data.Models
+@model Movie
+
+<div>
+    <h2>Title: @Model.Title</h2>
+    <h2>Year: @Model.Year</h2>
+    <p>Score: @Model.Score/10</p>
+    <form method="post" asp-page-handler="Delete" asp-route-id="@Model.Id">
+        <button class="btn btn-danger">Delete</button>
+    </form>
+</div>
