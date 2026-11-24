@@ -1,51 +1,56 @@
 using DBrownWebApp.Data.DAL;
 using DBrownWebApp.Data.Models;
+using DBrownWebApp.Data.Strategies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Cryptography.X509Certificates;
 
 namespace DBrownWebApp.Pages
 {
     public class MoviesModel : PageModel
     {
+        private readonly IMovieDal _movieDal;
+        private readonly MovieSortContext _movieSortContext;
 
-        //public IMovieDal Dal { get; private set; }
         public List<Movie> Movies { get; private set; } = new List<Movie>();
 
-        //public MoviesModel(IMovieDal dal)
-        //{
-        //    Dal = dal;
-        //}
-
-
         [BindProperty]
-        public Movie NewMovie { get; set; }
+        public Movie NewMovie { get; set; } = new Movie();
+
+        [BindProperty(SupportsGet = true)]
+        public string Sort { get; set; } = "title";
+
+        public MoviesModel(
+            IMovieDal movieDal,
+            MovieSortContext movieSortContext)
+        {
+            _movieDal = movieDal;
+            _movieSortContext = movieSortContext;
+        }
 
         public void OnGet()
         {
-            NewMovie = new Movie();
-
-            Movies = MovieDal.Instance.GetAllMovies().ToList();
+            LoadMovies();
         }
+
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid || NewMovie == null) 
-            { 
-                Movies = MovieDal.Instance.GetAllMovies().ToList();
+            if (!ModelState.IsValid)
+            {
+                LoadMovies();
 
                 return Page();
             }
 
-           MovieDal.Instance.addMovie(NewMovie);
+            _movieDal.addMovie(NewMovie);
 
-            return RedirectToPage();
+            return RedirectToPage(new { sort = Sort });
         }
 
-        public IActionResult OnPostDelete()
+        private void LoadMovies()
         {
-            //Movie toRemove = Provider.Movies.FirstOrDefault(m => m.Id == id);
-            //Movies.Remove(toRemove);
-            return RedirectToAction("Get");
+            Movies = _movieSortContext
+                .Sort(_movieDal.GetAllMovies(), Sort)
+                .ToList();
         }
     }
 }
