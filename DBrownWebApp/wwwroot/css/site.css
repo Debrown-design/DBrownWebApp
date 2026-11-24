@@ -21,3 +21,18 @@ body {
     font-size: 30px;
     color:saddlebrown;
 }
+.movie-table {
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+}
+
+.movie-table th,
+.movie-table td {
+    padding: 0.75rem 2rem;
+    text-align: left;
+}
+
+.movie-table th:first-child,
+.movie-table td:first-child {
+    padding-left: 0;
+}

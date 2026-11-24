@@ -1,4 +1,5 @@
 using DBrownWebApp.Data.DAL;
+using DBrownWebApp.Data.Strategies;
 
 namespace DBrownWebApp
 {
@@ -12,6 +13,11 @@ namespace DBrownWebApp
             builder.Services.AddRazorPages();
             builder.Services.AddSingleton<IMovieDal>(MovieDal.Instance);
 
+
+            builder.Services.AddTransient<IMovieSortStrategy, SortByTitleStrategy>();
+            builder.Services.AddTransient<IMovieSortStrategy, SortByYearStrategy>();
+            builder.Services.AddTransient<IMovieSortStrategy, SortByScoreStrategy>();
+            builder.Services.AddTransient<MovieSortContext>();
 
             var app = builder.Build();
 

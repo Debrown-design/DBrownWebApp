@@ -30,21 +30,41 @@
     </div>
 </form>
 
+<form method="get">
+    <label for="sort">Sort movies by:</label>
 
+    <select id="sort" name="sort" onchange="this.form.submit()">
+        <option value="title" selected="@(Model.Sort == "title")">
+            Title
+        </option>
+        <option value="year" selected="@(Model.Sort == "year")">
+            Year
+        </option>
+        <option value="score" selected="@(Model.Sort == "score")">
+            Score
+        </option>
+    </select>
+</form>
 
-<div>
-@* @{
-   
-    //for(Movie movie : movies)
-    foreach(Movie movie in MoviesModel.Provider.Movies)
-    {
-      <partial name="_MoviePartial" model="movie"/> 
-      //<p>@movie</p>
-    }
-} *@
-</div>
-
-
+<table class="movie-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Movie movie in Model.Movies)
+        {
+            <tr>
+                <td>@movie.Title</td>
+                <td>@movie.Year</td>
+                <td>@movie.Score</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial"/>
